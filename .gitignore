@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+.DS_Store
+.env
+.env.*
+!.env.example
+/evidence
+/examples
+/docs
+/fixtures/source-excerpts.json
+/public/fonts/Pally-Variable.woff2

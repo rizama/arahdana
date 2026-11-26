@@ -1,0 +1,147 @@
+:root {
+  /* Brand Primary Sage Capital (Independent financial palette) */
+  --color-gold-50: #eff8f3;
+  --color-gold-100: #ddefe4;
+  --color-gold-200: #c5e5d0;
+  --color-gold-300: #b7ddc5;
+  --color-gold-400: #a8d6b9;
+  --color-gold-500: #8ccca7; /* Primary */
+  --color-gold-600: #72ba90;
+  --color-gold-700: #438966;
+  --color-gold-800: #31694f;
+  --color-gold-900: #1f4938;
+  --color-gold-950: #153629;
+
+  /* Financial Slate (Neutrals) */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  /* Status Semantics */
+  --color-success-500: #10b981; /* Surplus / Growth */
+  --color-danger-500: #ef4444; /* Emergency / Defisit */
+  --color-warning-500: #f59e0b; /* Advisory / Kehati-hatian */
+  --color-info-500: #3b82f6; /* Financial Education */
+
+  /* Spacing Scale (4px/8px Baseline Rhythm) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Border Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Typography Stacks */
+  --font-heading: Georgia, serif;
+  --font-body: system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+}
+
+/* LIGHT THEME MAPPINGS */
+:root {
+  --bg-canvas: var(--color-slate-100);
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: var(--color-slate-50);
+  --bg-surface-muted: var(--color-slate-200);
+
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-600);
+  --text-tertiary: var(--color-slate-400);
+  --text-inverse: #ffffff;
+
+  --border-subtle: var(--color-slate-200);
+  --border-default: var(--color-slate-300);
+  --border-strong: var(--color-slate-400);
+
+  --brand-surface: var(--color-gold-500);
+  --brand-surface-hover: var(--color-gold-400);
+  --brand-surface-subtle: var(--color-gold-50);
+  --brand-text-on-surface: var(--color-slate-900); /* Contrast Ratio: 9.6:1 */
+  --brand-border: var(--color-gold-600);
+
+  --focus-ring: #0f172a;
+  --focus-ring-offset: 2px;
+}
+
+:root {
+  color-scheme: light;
+  --bg-canvas: #f2f3ed;
+  --bg-surface: #fffefa;
+  --bg-surface-subtle: #edf3ec;
+}
+
+/* Accessible controls and status pairs for the editorial surfaces. */
+:root {
+  --control-border: #64748b;
+  --icon-color: #31694f;
+  --status-success-bg: #ecfdf5;
+  --status-success-text: #065f46;
+  --status-almost-bg: #fffbeb;
+  --status-almost-text: #78350f;
+  --status-failed-bg: #fff1f2;
+  --status-failed-text: #9f1239;
+}
+
+[data-theme="dark"] {
+  --bg-canvas: var(--color-slate-950);
+  --bg-surface: var(--color-slate-900);
+  --bg-surface-elevated: var(--color-slate-800);
+  --bg-surface-subtle: #162032;
+  --bg-surface-muted: var(--color-slate-700);
+
+  --text-primary: #f8fafc;
+  --text-secondary: var(--color-slate-400);
+  --text-tertiary: var(--color-slate-500);
+  --text-inverse: var(--color-slate-900);
+
+  --border-subtle: var(--color-slate-800);
+  --border-default: var(--color-slate-700);
+  --border-strong: var(--color-slate-600);
+
+  --brand-surface: var(--color-gold-400);
+  --brand-surface-hover: var(--color-gold-300);
+  --brand-surface-subtle: rgba(253, 226, 118, 0.12);
+  --brand-text-on-surface: var(--color-slate-950);
+  --brand-border: var(--color-gold-400);
+
+  --focus-ring: #a8d6b9;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-canvas: #101b18;
+  --bg-surface: #192622;
+  --bg-surface-elevated: #21332c;
+  --bg-surface-subtle: #253a31;
+  --brand-surface-subtle: #253a31;
+}
+
+[data-theme="dark"] {
+  --control-border: #94a3b8;
+  --icon-color: #a8d6b9;
+  --status-success-bg: #153629;
+  --status-success-text: #a8d6b9;
+  --status-almost-bg: #382b16;
+  --status-almost-text: #fcd34d;
+  --status-failed-bg: #3c1923;
+  --status-failed-text: #fda4af;
+}

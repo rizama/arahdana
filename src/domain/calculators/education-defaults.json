@@ -1,0 +1,226 @@
+{
+  "sd": {
+    "abroad": {
+      "general": {
+        "up": 17000000,
+        "spp": 16000000
+      }
+    },
+    "jakarta": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 23000000,
+        "spp": 2000000
+      },
+      "nasionalPlus": {
+        "up": 43000000,
+        "spp": 2750000
+      },
+      "internasional": {
+        "up": 57000000,
+        "spp": 18000000
+      }
+    },
+    "jawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 22500000,
+        "spp": 1600000
+      },
+      "nasionalPlus": {
+        "up": 38000000,
+        "spp": 3500000
+      },
+      "internasional": {
+        "up": 57000000,
+        "spp": 4500000
+      }
+    },
+    "luarJawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 12000000,
+        "spp": 1000000
+      },
+      "nasionalPlus": {
+        "up": 15000000,
+        "spp": 1000000
+      },
+      "internasional": {
+        "up": 30000000,
+        "spp": 10800000
+      }
+    }
+  },
+  "smp": {
+    "abroad": {
+      "general": {
+        "up": 17000000,
+        "spp": 21000000
+      }
+    },
+    "jakarta": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 30000000,
+        "spp": 2400000
+      },
+      "nasionalPlus": {
+        "up": 32000000,
+        "spp": 2500000
+      },
+      "internasional": {
+        "up": 43000000,
+        "spp": 22000000
+      }
+    },
+    "jawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 18500000,
+        "spp": 1000000
+      },
+      "nasionalPlus": {
+        "up": 27000000,
+        "spp": 4000000
+      },
+      "internasional": {
+        "up": 33000000,
+        "spp": 8400000
+      }
+    },
+    "luarJawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 10000000,
+        "spp": 1000000
+      },
+      "nasionalPlus": {
+        "up": 18000000,
+        "spp": 1800000
+      },
+      "internasional": {
+        "up": 30000000,
+        "spp": 13000000
+      }
+    }
+  },
+  "sma": {
+    "abroad": {
+      "general": {
+        "up": 17000000,
+        "spp": 26000000
+      }
+    },
+    "jakarta": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 22000000,
+        "spp": 1800000
+      },
+      "nasionalPlus": {
+        "up": 32000000,
+        "spp": 2700000
+      },
+      "internasional": {
+        "up": 54000000,
+        "spp": 22000000
+      }
+    },
+    "jawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 12000000,
+        "spp": 1000000
+      },
+      "nasionalPlus": {
+        "up": 25000000,
+        "spp": 4500000
+      },
+      "internasional": {
+        "up": 33000000,
+        "spp": 9000000
+      }
+    },
+    "luarJawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 0
+      },
+      "swasta": {
+        "up": 11000000,
+        "spp": 1000000
+      },
+      "nasionalPlus": {
+        "up": 20000000,
+        "spp": 1800000
+      },
+      "internasional": {
+        "up": 27000000,
+        "spp": 14000000
+      }
+    }
+  },
+  "s1": {
+    "abroad": {
+      "general": {
+        "up": 0,
+        "spp": 250000000
+      }
+    },
+    "jakarta": {
+      "negeri": {
+        "up": 12000000,
+        "spp": 7000000
+      },
+      "swasta": {
+        "up": 35000000,
+        "spp": 20000000
+      }
+    },
+    "jawa": {
+      "negeri": {
+        "up": 30000000,
+        "spp": 15000000
+      },
+      "swasta": {
+        "up": 29000000,
+        "spp": 12000000
+      }
+    },
+    "luarJawa": {
+      "negeri": {
+        "up": 0,
+        "spp": 7000000
+      },
+      "swasta": {
+        "up": 2700000,
+        "spp": 6000000
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "arahdana",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.1.0",
+    "npm": "11.3.0"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env --import tsx src/server/dev.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "start": "node --env-file=.env build/server/index.js",
+    "test": "node --env-file=.env node_modules/vitest/vitest.mjs run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --env-file=.env --import tsx src/server/db/migrate.ts"
+  },
+  "dependencies": {
+    "express": "5.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7",
+    "drizzle-orm": "0.45.4",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "vite": "8.3.8",
+    "vitest": "5.1.1",
+    "typescript": "7.0.2",
+    "drizzle-kit": "0.31.11",
+    "tsx": "4.23.15",
+    "@types/express": "5.0.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/node": "26.6.6",
+    "@types/pg": "8.23.1"
+  }
+}
