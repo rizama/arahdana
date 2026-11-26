@@ -34,7 +34,6 @@ export function BinderShell({
   onToggleTheme: () => void;
   children: ReactNode;
 }) {
-  const containerClass = route === "home" ? css.binderContainer : css.binderContainerNarrow;
   const mainClass =
     css.ledgerMain + " " + (route === "home" ? css.ledgerMainHome : css.ledgerMainForm);
 
@@ -43,7 +42,7 @@ export function BinderShell({
       <a href="#main" className={css.skip}>
         Lewati ke konten
       </a>
-      <div className={containerClass}>
+      <div className={css.binderContainer}>
         <header className={css.binderHeader}>
           <div className={css.rulerStrip} aria-hidden="true">
             <span>| 00 cm |</span>

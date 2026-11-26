@@ -25,6 +25,21 @@ const statusBadges: Record<State, string> = {
   failed: "BELUM COCOK",
 };
 
+function StatusSeal({ state }: { state: State }) {
+  const label = <span className={css.statusSeal}>{statusBadges[state]}</span>;
+  if (state === "almost") return label;
+
+  return (
+    <div className={css.statusEmblem}>
+      <span className={css.statusEmoji} aria-hidden="true">
+        {state === "success" ? "🥳" : "🥺"}
+        <span>{state === "success" ? "💚" : "💔"}</span>
+      </span>
+      {label}
+    </div>
+  );
+}
+
 function StatusIcon({ state }: { state: State }) {
   return (
     <svg
@@ -291,7 +306,6 @@ function StrategyTab({ result, input }: { result: Result; input: Result }) {
   const projected = num(result.future_value);
   const gap = num(result.gap);
   const months = Math.round(num(input.years) * 12);
-  const timeline = (result.timeline as Result[]) ?? [];
 
   return (
     <>
@@ -303,10 +317,13 @@ function StrategyTab({ result, input }: { result: Result; input: Result }) {
           </strong>
           <StatusDetail result={result} rec={rec} />
         </div>
-        <span className={css.statusSeal}>{statusBadges[state]}</span>
+        <StatusSeal state={state} />
       </div>
 
-      <section className={css.targetBanner}>
+      <section
+        className={css.targetBanner}
+        data-tone={state === "success" ? "success" : "danger"}
+      >
         <div className={css.targetLeft}>
           <div className={css.targetIconBox}>
             <TargetIcon />
@@ -432,31 +449,9 @@ function StrategyTab({ result, input }: { result: Result; input: Result }) {
         </div>
       </section>
 
-      <BreakdownSection result={result} />
-
       <InstrumentsCard />
 
-      <details className={css.binderCard}>
-        <summary className={css.timelineSummary}>Timeline Proyeksi Tahunan</summary>
-        <div className={css.tableScroll} tabIndex={0}>
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">Tahun</th>
-                <th scope="col">Nilai investasi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {timeline.map((row) => (
-                <tr key={num(row.year)}>
-                  <td>{num(row.year)}</td>
-                  <td>{money(num(row.value))}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </details>
+      <BreakdownSection result={result} />
     </>
   );
 }
@@ -489,7 +484,7 @@ function RecommendationTab({
           </strong>
           <p>Kamu bisa mempertahankan rencana setoran dan durasi ini.</p>
         </div>
-        <span className={css.statusSeal}>SUDAH COCOK</span>
+        <StatusSeal state="success" />
       </div>
     );
   }
@@ -536,7 +531,10 @@ function RecommendationTab({
         </div>
       </fieldset>
 
-      <section className={css.targetBanner}>
+      <section
+        className={css.targetBanner}
+        data-tone={isDuration && !span ? "danger" : "success"}
+      >
         <div className={css.targetLeft}>
           <div className={css.targetIconBox}>
             <TargetIcon />
@@ -747,21 +745,26 @@ const exportFormats = [
 
 function DownloadTab({ result }: { result: Result }) {
   const [name, setName] = useState("");
-  const [exportTheme, setExportTheme] = useState<"light" | "dark">("light");
+  const [continueWithoutName, setContinueWithoutName] = useState(false);
+  const [exportTheme, setExportTheme] = useState<"light" | "dark" | null>(null);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
 
   const target = num(result.target);
   const principalShare = Math.max(0, Math.min(100, num(result.principal_percent)));
   const interestShare = Math.max(0, Math.min(100 - principalShare, num(result.interest_percent)));
-  const previewName = name.trim() || "Rencana Dana Darurat";
+  const trimmedName = name.trim();
+  const showVariants = Boolean(trimmedName) || continueWithoutName;
+  const previewName = trimmedName || "Rencana Dana Darurat";
 
   async function save(portrait: boolean) {
+    if (!exportTheme) return;
+
     setBusy(true);
     setStatus("Menyiapkan gambar…");
     try {
       await downloadPng(
-        { ...result, dream_name: name.trim() },
+        { ...result, dream_name: trimmedName },
         "Dana Darurat",
         "dana-darurat",
         portrait,
@@ -778,23 +781,6 @@ function DownloadTab({ result }: { result: Result }) {
 
   return (
     <>
-      <section className={css.infoNotice}>
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path
-            fillRule="evenodd"
-            d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a1 1 0 0 0 0 2v3a1 1 0 0 0 1 1h1a1 1 0 1 0 0-2v-3a1 1 0 0 0-1-1H9Z"
-            clipRule="evenodd"
-          />
-        </svg>
-        <div>
-          <h3>Download gambar</h3>
-          <p>
-            Kamu bisa mengunduh ringkasan strategi dana darurat sebagai gambar PNG lokal untuk
-            catatan pribadimu atau dibagikan.
-          </p>
-        </div>
-      </section>
-
       <section className={css.binderCard}>
         <div>
           <label htmlFor="emergency-export-name">Nama kamu (opsional)</label>
@@ -805,121 +791,144 @@ function DownloadTab({ result }: { result: Result }) {
             maxLength={80}
             placeholder="Tuliskan nama atau inisialmu..."
             aria-describedby="emergency-export-privacy"
-            onChange={(event) => setName(event.target.value)}
+            onChange={(event) => {
+              const value = event.target.value;
+              setName(value);
+              setContinueWithoutName(false);
+              if (!value.trim()) setExportTheme(null);
+            }}
           />
           <p id="emergency-export-privacy" className={css.paramSub}>
             Nama hanya dipakai di gambar unduhan dan tetap di perangkatmu.
           </p>
         </div>
 
-        <div>
-          <p className={css.paramLabel}>Varian gambar</p>
-          <div className={css.exportThemeRow} role="group" aria-label="Varian gambar">
+        {!showVariants && (
+          <div>
+            <button
+              type="button"
+              className={css.btnSheetSecondary}
+              onClick={() => setContinueWithoutName(true)}
+            >
+              Lanjut tanpa nama
+            </button>
+          </div>
+        )}
+      </section>
+
+      {showVariants && (
+        <section className={css.binderCard}>
+          <div className={css.binderCardHead}>
+            <h3 id="emergency-export-variant">Variasi gambar</h3>
+          </div>
+          <div className={css.exportThemeRow} role="group" aria-labelledby="emergency-export-variant">
             {(["light", "dark"] as const).map((variant) => (
               <button
                 key={variant}
                 type="button"
                 className={css.exportThemeBtn}
                 aria-pressed={exportTheme === variant}
+                autoFocus={continueWithoutName && variant === "light"}
                 onClick={() => setExportTheme(variant)}
               >
                 {variant === "light" ? "Light" : "Dark"}
               </button>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section aria-label="Pilih ukuran gambar">
-        <div className={css.binderCardHead}>
-          <h3>Pilih ukuran gambar</h3>
-          <span className={css.binderCardNote}>PNG resolusi tinggi · {exportTheme === "light" ? "Light" : "Dark"}</span>
-        </div>
+      {exportTheme && (
+        <section aria-label="Pilih ukuran gambar">
+          <div className={css.binderCardHead}>
+            <h3>Pilih ukuran gambar</h3>
+            <span className={css.binderCardNote}>PNG resolusi tinggi · {exportTheme === "light" ? "Light" : "Dark"}</span>
+          </div>
 
-        <div className={css.exportCards} aria-busy={busy}>
-          {exportFormats.map((fmt) => (
-            <article className={css.exportCard} key={fmt.name}>
-              <div className={css.previewStage}>
-                <div
-                  className={
-                    css.miniCard +
-                    " " +
-                    (fmt.portrait ? css.miniStory : css.miniSquare)
-                  }
-                  data-preview-theme={exportTheme}
+          <div className={css.exportCards} aria-busy={busy}>
+            {exportFormats.map((fmt) => (
+              <article className={css.exportCard} key={fmt.name}>
+                <div className={css.previewStage}>
+                  <div
+                    className={
+                      css.miniCard +
+                      " " +
+                      (fmt.portrait ? css.miniStory : css.miniSquare)
+                    }
+                    data-preview-theme={exportTheme}
+                  >
+                    <div className={css.miniHead}>
+                      <span className={css.miniLogo} aria-hidden="true">
+                        A
+                      </span>
+                      <span>Dana Darurat</span>
+                    </div>
+                    <div>
+                      <div className={css.miniTitle}>Target Dana</div>
+                      <div className={css.miniAmount}>{money(target)}</div>
+                    </div>
+                    <svg
+                      className={css.miniSvg}
+                      viewBox="0 0 100 8"
+                      preserveAspectRatio="none"
+                      aria-hidden="true"
+                    >
+                      <rect className={css.barPokok} x="0" y="0" width={principalShare} height="8" />
+                      <rect
+                        className={css.barBunga}
+                        x={principalShare}
+                        y="0"
+                        width={interestShare}
+                        height="8"
+                      />
+                    </svg>
+                    <div className={css.miniFoot}>
+                      <span className={css.miniName}>{previewName}</span>
+                      <span>Arda</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={css.exportMeta}>
+                  <h4>
+                    {fmt.name} ({fmt.ratio})
+                  </h4>
+                  <p>{fmt.size} piksel</p>
+                  <div className={css.tagRow}>
+                    {fmt.channels.map((channel) => (
+                      <span key={channel}>{channel}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className={css.downloadBtn}
+                  disabled={busy}
+                  aria-label={`Download ${fmt.name} ${exportTheme === "light" ? "Light" : "Dark"}`}
+                  onClick={() => void save(fmt.portrait)}
                 >
-                  <div className={css.miniHead}>
-                    <span className={css.miniLogo} aria-hidden="true">
-                      A
-                    </span>
-                    <span>Dana Darurat</span>
-                  </div>
-                  <div>
-                    <div className={css.miniTitle}>Target Dana</div>
-                    <div className={css.miniAmount}>{money(target)}</div>
-                  </div>
                   <svg
-                    className={css.miniSvg}
-                    viewBox="0 0 100 8"
-                    preserveAspectRatio="none"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     aria-hidden="true"
                   >
-                    <rect className={css.barPokok} x="0" y="0" width={principalShare} height="8" />
-                    <rect
-                      className={css.barBunga}
-                      x={principalShare}
-                      y="0"
-                      width={interestShare}
-                      height="8"
-                    />
+                    <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4-4 4m0 0-4-4m4 4V4" />
                   </svg>
-                  <div className={css.miniFoot}>
-                    <span className={css.miniName}>{previewName}</span>
-                    <span>Arda</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className={css.exportMeta}>
-                <h4>
-                  {fmt.name} ({fmt.ratio})
-                </h4>
-                <p>{fmt.size} piksel</p>
-                <div className={css.tagRow}>
-                  {fmt.channels.map((channel) => (
-                    <span key={channel}>{channel}</span>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className={css.downloadBtn}
-                disabled={busy}
-                aria-label={`Download ${fmt.name} ${exportTheme === "light" ? "Light" : "Dark"}`}
-                onClick={() => void save(fmt.portrait)}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M4 16v1a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-1m-4-4-4 4m0 0-4-4m4 4V4" />
-                </svg>
-                <span>Download {fmt.name}</span>
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <p role="status" className={css.statusText}>
-        {status}
-      </p>
+                  <span>Download {fmt.name}</span>
+                </button>
+              </article>
+            ))}
+          </div>
+          <p role="status" className={css.statusText}>
+            {status}
+          </p>
+        </section>
+      )}
     </>
   );
 }

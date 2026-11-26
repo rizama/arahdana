@@ -158,7 +158,9 @@ describe("T-BINDER-03 & T-BINDER-04 — Result modal, 3 tabs, regression & Downl
     expect(html).toContain(money(16_000_000));
     expect(html).toContain("3,23%");
     expect(html).toContain(money(result.interest_earned as number));
-    expect(html).toContain("Timeline Proyeksi Tahunan");
+    expect(html).not.toContain("Timeline Proyeksi Tahunan");
+    expect(html).toContain("Pilihan Investasi");
+    expect(html.indexOf("Pokok vs Imbal Hasil")).toBeGreaterThan(html.indexOf("Pilihan Investasi"));
     const ordered = [
       "Deposito",
       "Emas",
@@ -229,20 +231,17 @@ describe("T-BINDER-03 & T-BINDER-04 — Result modal, 3 tabs, regression & Downl
     expect(zeroDurationHtml).not.toContain("NaN");
   });
 
-  it("renders Download tab with empty optional name, Light/Dark variant selector, and 1:1 / 9:16 cards", () => {
+  it("shows only the optional name step when opening Download", () => {
     const result = calculate("dana-darurat", regressionInput);
     const html = renderToStaticMarkup(
       <EmergencyResults result={result} input={regressionInput} tab={2} />,
     );
-    expect(html).toContain("Download gambar");
     expect(html).toContain("Nama kamu (opsional)");
-    expect(html).toContain("Varian gambar");
-    expect(html).toContain("Feeds (1:1)");
-    expect(html).toContain("1024×1024 piksel");
-    expect(html).toContain("Stories (9:16)");
-    expect(html).toContain("1080×1920 piksel");
-    expect(html).toContain("Download Feeds");
-    expect(html).toContain("Download Stories");
+    expect(html).toContain("Lanjut tanpa nama");
+    expect(html).not.toContain("Variasi gambar");
+    expect(html).not.toContain("Pilih ukuran gambar");
+    expect(html).not.toContain("Download Feeds");
+    expect(html).not.toContain("Download Stories");
     expect(html).not.toContain("Bagikan Berkas");
     expect(html).not.toContain('value="sam"');
     expect(html).not.toContain("Arda.id");
@@ -266,11 +265,31 @@ describe("T-BINDER-03 & T-BINDER-04 — Result modal, 3 tabs, regression & Downl
       </ResultSheet>,
     );
     expect(html).toContain('role="tablist"');
+    expect(html).toContain('data-tone="success"');
+    expect(html).toContain("M4 19.5A2.5 2.5 0 0 1 6.5 17H20");
     expect(html).toContain("Strategi");
     expect(html).toContain("Rekomendasi");
     expect(html).toContain("Download");
     expect(html).toContain("Tutup");
     expect(html).toContain("Buka Rekomendasi Solusi");
     expect(html).not.toContain("style=");
+
+    const dangerHtml = renderToStaticMarkup(
+      <ResultSheet
+        dialog={createRef()}
+        onClose={() => {}}
+        title="Evaluasi Strategi Dana Darurat"
+        subtitle="Tinjauan rencana"
+        tone="danger"
+        tabs={["Strategi", "Rekomendasi", "Download"]}
+        activeTab={0}
+        onTabChange={() => {}}
+      >
+        {(tab) => <div>Panel {tab}</div>}
+      </ResultSheet>,
+    );
+    expect(dangerHtml).toContain('data-tone="danger"');
+    expect(dangerHtml).toContain("M12 9v2m0 4h.01");
+    expect(dangerHtml).not.toContain("style=");
   });
 });

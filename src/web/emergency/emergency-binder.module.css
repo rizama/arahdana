@@ -447,36 +447,6 @@
   color: var(--abf-text-muted);
 }
 
-.annualExpense {
-  margin-top: 12px;
-  max-width: 420px;
-  padding: 12px 14px;
-  border-radius: var(--abf-radius-md);
-  background: var(--abf-bg-parchment);
-  border: 1px dashed var(--abf-border-dashed);
-}
-
-.annualExpense span {
-  display: block;
-  font: 600 12px/1.3 var(--abf-font-sans);
-  color: var(--abf-text-secondary);
-}
-
-.annualExpense output {
-  display: block;
-  margin: 4px 0 2px;
-  font: 700 1.2rem/1.3 var(--abf-font-mono);
-  font-variant-numeric: tabular-nums;
-  color: var(--abf-brand-forest);
-  overflow-wrap: anywhere;
-}
-
-.annualExpense small {
-  display: block;
-  font: 400 11px/1.3 var(--abf-font-mono);
-  color: var(--abf-text-muted);
-}
-
 .errorText {
   margin: 8px 0 0;
   font: 600 13px/1.4 var(--abf-font-sans);
@@ -892,6 +862,7 @@
 }
 
 .sheetIconTile {
+  position: relative;
   width: 40px;
   height: 40px;
   border-radius: var(--abf-radius-lg);
@@ -901,6 +872,23 @@
   place-items: center;
   flex: none;
   box-shadow: var(--abf-shadow-sm);
+}
+
+.sheetIconTile[data-tone="danger"] {
+  background: var(--abf-status-danger-solid);
+  color: var(--abf-raw-ochre-100);
+}
+
+.sheetIconTile[data-tone="danger"]::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--abf-radius-full);
+  background: var(--abf-raw-ochre-400);
+  border: 1.5px solid var(--abf-bg-card);
 }
 
 .sheetIconTile svg {
@@ -973,8 +961,8 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 12px 24px max(12px, env(safe-area-inset-bottom));
+  column-gap: 14px;
+  padding: 0 16px env(safe-area-inset-bottom) 6px;
   background: var(--abf-bg-card);
   border-top: 2px solid var(--abf-border-default);
 }
@@ -983,7 +971,8 @@
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
-  gap: 8px;
+  width: 300px;
+  max-width: 100%;
 }
 
 .sheetTabBtn {
@@ -993,26 +982,40 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-width: 78px;
-  min-height: 48px;
-  padding: 6px 12px;
-  border: 1px solid transparent;
-  border-radius: var(--abf-radius-md);
+  min-width: 0;
+  min-height: 68px;
+  padding: 14px 4px;
+  border: 0;
   background: transparent;
   color: var(--abf-text-muted);
-  font: 600 12px/1.2 var(--abf-font-sans);
+  font: 500 13px/1.2 var(--abf-font-sans);
 }
 
-.sheetTabBtn:hover:not([aria-selected="true"]) {
-  background: var(--abf-bg-parchment);
-  color: var(--abf-text-primary);
+.sheetTabBtn:hover {
+  background: transparent;
+  color: var(--abf-brand-forest);
 }
 
 .sheetTabBtn[aria-selected="true"] {
-  background: var(--abf-status-info-bg);
-  border-color: var(--abf-status-info-border);
-  color: var(--abf-status-info-text);
+  color: var(--abf-brand-forest);
   font-weight: 700;
+}
+
+.sheetTabBtn[aria-selected="true"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 28px;
+  height: 3px;
+  border-radius: var(--abf-radius-full);
+  background: currentColor;
+  transform: translateX(-50%);
+}
+
+.sheetTabBtn:focus-visible {
+  outline: 2px solid var(--abf-focus-ring);
+  outline-offset: -4px;
 }
 
 .sheetTabBtn svg {
@@ -1121,6 +1124,32 @@
   text-transform: uppercase;
 }
 
+.statusEmblem {
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  flex: none;
+  padding: 10px;
+  border: 1px solid var(--abf-border-default);
+  border-radius: var(--abf-radius-lg);
+}
+
+.statusEmblem .statusSeal {
+  border: 0;
+  background: var(--abf-bg-card);
+}
+
+.statusEmoji {
+  position: relative;
+  font: 32px/1.1 var(--abf-font-sans);
+}
+
+.statusEmoji > span {
+  position: absolute;
+  inset: -2px -8px auto auto;
+  font-size: 16px;
+}
+
 /* Emerald Target Banner */
 .targetBanner {
   border-radius: var(--abf-radius-xl);
@@ -1134,6 +1163,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+}
+
+.targetBanner[data-tone="danger"] {
+  background: linear-gradient(135deg, #9f1919 0%, #7f1d1d 100%);
+  border-color: var(--abf-raw-red-800);
+}
+
+.targetBanner[data-tone="danger"] .targetEyebrow,
+.targetBanner[data-tone="danger"] .targetSub {
+  color: var(--abf-raw-red-100);
 }
 
 .targetLeft {
@@ -1467,50 +1506,6 @@
   flex: none;
 }
 
-/* Accordion & Table */
-.timelineSummary {
-  cursor: pointer;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  font: 700 14px/1.3 var(--abf-font-serif);
-  color: var(--abf-text-primary);
-}
-
-.tableScroll {
-  overflow-x: auto;
-  border-radius: var(--abf-radius-md);
-  border: 1px solid var(--abf-border-subtle);
-}
-
-.tableScroll table {
-  width: 100%;
-  border-collapse: collapse;
-  font: 500 13px/1.4 var(--abf-font-mono);
-  font-variant-numeric: tabular-nums;
-}
-
-.tableScroll th {
-  text-align: left;
-  padding: 10px 12px;
-  background: var(--abf-bg-well);
-  color: var(--abf-text-secondary);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-bottom: 1px solid var(--abf-border-default);
-}
-
-.tableScroll td {
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--abf-border-subtle);
-}
-
-.tableScroll th:last-child,
-.tableScroll td:last-child {
-  text-align: right;
-}
-
 /* Vertical Option Timeline (2-point real data) */
 .verticalTimeline {
   position: relative;
@@ -1648,35 +1643,6 @@
 }
 
 /* Download Tab */
-.infoNotice {
-  padding: 16px 18px;
-  border-radius: var(--abf-radius-lg);
-  background: var(--abf-status-success-bg);
-  border: 1px solid var(--abf-status-success-border);
-  border-left: 4px solid var(--abf-brand-forest);
-  color: var(--abf-status-success-text);
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.infoNotice svg {
-  width: 20px;
-  height: 20px;
-  flex: none;
-  margin-top: 2px;
-}
-
-.infoNotice h3 {
-  margin: 0;
-  font: 700 14px/1.3 var(--abf-font-sans);
-}
-
-.infoNotice p {
-  margin: 4px 0 0;
-  font: 400 13px/1.5 var(--abf-font-sans);
-}
-
 .exportNameInput {
   max-width: 380px;
   min-height: 44px;
@@ -1943,12 +1909,30 @@
   }
 
   .sheetFooter {
-    padding: 10px 14px max(12px, env(safe-area-inset-bottom));
+    padding-inline: 14px;
+  }
+
+  .sheetTabs {
+    width: 100%;
   }
 
   .sheetFooterActions {
     width: 100%;
     justify-content: flex-end;
+    padding-bottom: 12px;
+  }
+
+  .statusBanner {
+    flex-wrap: wrap;
+  }
+
+  .statusCopy {
+    flex: 1 1 15rem;
+  }
+
+  .statusEmblem,
+  .statusBanner > .statusSeal {
+    margin-inline-start: auto;
   }
 
   .exportCards {

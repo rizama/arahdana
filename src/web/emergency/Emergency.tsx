@@ -6,7 +6,6 @@ import {
   answerError,
   emptyAnswersFor,
   furthestStep,
-  parseRupiah,
   type Answers,
   type Question,
 } from "../conversational/answers";
@@ -317,16 +316,6 @@ export function Emergency() {
                         />
                       )}
 
-                      {question.key === "expense" && answers.expense && !errors[0] && (
-                        <div className={css.annualExpense}>
-                          <span id="annual-expense-label">Pengeluaran wajib per tahun</span>
-                          <output htmlFor={id} aria-labelledby="annual-expense-label">
-                            {money(parseRupiah(answers.expense) * 12)}
-                          </output>
-                          <small>Pengeluaran per bulan × 12 bulan</small>
-                        </div>
-                      )}
-
                       {monthsNote && <small className={css.fieldNote}>{monthsNote}</small>}
 
                       {error && (
@@ -507,6 +496,7 @@ export function Emergency() {
           onClose={() => cta.current?.focus()}
           title={activeMeta.title}
           subtitle={activeMeta.subtitle}
+          tone={tab === 0 && needsRecommendation ? "danger" : "success"}
           action={
             tab === 0 && needsRecommendation
               ? {

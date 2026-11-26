@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { CalculatorSlug, Result } from '../../domain/calculators/types';
 import { money, percent } from '../config';
-import { answerError, decimal, parseRupiah, type Answers, type Question } from './answers';
+import { decimal, parseRupiah, type Answers, type Question } from './answers';
 import { DataTable, StackedBar, WeddingBudgetView, EducationLevelsView, KprPrincipalNote, weddingBudgetError, educationLevelsError, educationAfterAge, educationPayload, initialEducation, weddingItems, weddingGroups, stageRows } from './structured';
 import { KprResults } from './Kpr';
 import { EMERGENCY_INSTRUMENTS, emergencyMultiplier } from '../emergency/summary';
@@ -140,12 +140,6 @@ export const specs: Partial<Record<CalculatorSlug, Spec>> = {
       initial: currency(answers.initial), payment: currency(answers.payment),
       rate: decimalOf(answers.rate), dream_name: '',
     }),
-    questionExtra: (key, view) => key === 'expense' && view.answers.expense && !answerError(specs['dana-darurat']!.questions[0], view.answers.expense, view.answers) ?
-      <div className={css.annualExpense}>
-        <span id="annual-expense-label">Pengeluaran wajib per tahun</span>
-        <output htmlFor="emergency-expense" aria-labelledby="annual-expense-label">{money(currency(view.answers.expense) * 12)}</output>
-        <small>Pengeluaran per bulan × 12 bulan</small>
-      </div> : null,
     targetNote: ({ payload }) => {
       const multiplier = emergencyMultiplier(payload.married === true, Number(payload.dependents));
       return `${multiplier}× pengeluaran wajib bulanan (${payload.married === true ? 'Sudah menikah' : 'Belum menikah'}, ${payload.dependents} tanggungan)`;

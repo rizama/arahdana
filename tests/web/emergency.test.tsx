@@ -48,17 +48,22 @@ describe('Dana Darurat conversational form', () => {
   });
 });
 describe('Dana Darurat result sheet panels', () => {
-  it.each([['0', 'Belum Cocok'], ['450000', 'Hampir'], ['500000', 'Cocok']])('renders strategy for %s monthly', (payment, label) => {
+  it.each([['0', 'Belum Cocok', 'danger'], ['450000', 'Hampir', 'danger'], ['500000', 'Cocok', 'success']])('renders strategy for %s monthly', (payment, label, tone) => {
     const input = toPayload({ ...answers, payment });
     const result = calculate('dana-darurat', input);
     const strategy = renderToStaticMarkup(<EmergencyResults result={result} input={input} tab={0} />);
     expect(strategy).toContain(label);
+    expect(strategy).toContain(`data-tone="${tone}"`);
     expect(strategy).toContain('50% Tabungan Likuid');
     expect(strategy).not.toContain('style=');
     const rec = renderToStaticMarkup(<EmergencyResults result={result} input={input} tab={1} />);
     expect(rec).toContain(label === 'Cocok' ? 'Strategimu sudah memenuhi target' : 'Pilih tipe rekomendasi');
     expect(rec).not.toContain('NaN');
-    if (payment === '0') expect((result.recommendations as Result).months).toBeNull();
+    if (payment === '0') {
+      expect((result.recommendations as Result).months).toBeNull();
+      const recDuration = renderToStaticMarkup(<EmergencyResults result={result} input={input} tab={1} initialSegment="duration" />);
+      expect(recDuration).toContain('data-tone="danger"');
+    }
   });
   it.each([11/12, 1, 5, 61/12, 10, 121/12])('matches domain instrument tier at %s years', (years) => {
     const result = calculate('dana-darurat', { ...toPayload(answers), years });

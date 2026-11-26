@@ -12,7 +12,7 @@ it("uses the Arda introduction on all nine calculators", () => {
 });
 it("uses Arah Dana branding and the arahdana project name", () => {
   const read = (path: string) => readFileSync(path, "utf8");
-  expect(read("index.html")).toContain("<title>ArDa — Arah Dana</title>");
+  expect(read("index.html")).toContain("<title>Arda — Arah Dana</title>");
   expect(read("src/web/export/render-png.ts")).toContain('c.fillText("Arda — Arah Dana", pad, 67);');
   expect(read("src/server/index.ts")).toContain("console.log('Arda (Arah Dana)");
   const manifest = JSON.parse(read("package.json"));
