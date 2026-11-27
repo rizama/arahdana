@@ -322,7 +322,7 @@
 
 .heroTitle {
   margin: 0;
-  font-family: "Pally", var(--abf-font-display);
+  font-family: "Pally", var(--abf-font-sans);
   font-weight: 500;
   font-size: clamp(1.75rem, 3.6vw, 2.75rem);
   line-height: 1.15;
@@ -958,7 +958,7 @@
   border: 2px solid var(--abf-border-strong);
   border-top: 0;
   border-radius: 0 0 var(--abf-radius-xl) var(--abf-radius-xl);
-  padding: 28px 36px calc(88px + env(safe-area-inset-bottom));
+  padding: 28px 36px calc(56px + env(safe-area-inset-bottom));
   box-shadow: var(--abf-shadow-folio);
   color: var(--abf-text-primary);
 }
@@ -1093,7 +1093,8 @@
   }
 
   .binderFooter {
-    padding: 22px 16px calc(88px + env(safe-area-inset-bottom));
+    padding-top: 22px;
+    padding-inline: 16px;
   }
 }
 

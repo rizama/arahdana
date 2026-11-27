@@ -1,4 +1,7 @@
 import type { CalculatorSlug } from "../domain/calculators/types";
+
+export const showCeritaUang = false;
+
 export const calculators: Record<
   CalculatorSlug,
   { title: string; description: string; icon: string; fields: string[] }

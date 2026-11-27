@@ -1,4 +1,5 @@
 import { it, expect, beforeAll, afterAll } from "vitest";
+import { existsSync } from "node:fs";
 import { httpHarness } from "./harness.js";
 let h: Awaited<ReturnType<typeof httpHarness>>;
 beforeAll(async () => {
@@ -40,4 +41,35 @@ it("serves ten CSP-safe local poster SVGs, no remote image/script resource", asy
     const svg = await r.text();
     expect(svg).not.toMatch(/<script|<image|href=/);
   }
+});
+it("loads Pally only when bundled and serves /fonts under strict CSP", async () => {
+  const htmlRes = await fetch(h.origin + "/");
+  expect(htmlRes.status).toBe(200);
+  const html = await htmlRes.text();
+  const pallyBundled = existsSync("dist/fonts/Pally-Variable.woff2");
+  expect(html.includes("/fonts/Pally-Variable.woff2")).toBe(pallyBundled);
+  expect(html.includes("/pally.css")).toBe(pallyBundled);
+  if (pallyBundled) {
+    expect(html).toMatch(
+      /<link[^>]+rel="preload"[^>]+href="\/fonts\/Pally-Variable\.woff2"[^>]+as="font"[^>]+type="font\/woff2"[^>]+crossorigin/i,
+    );
+    const css = await fetch(h.origin + "/pally.css");
+    expect(css.status).toBe(200);
+    expect(await css.text()).toContain("/fonts/Pally-Variable.woff2");
+  }
+
+  const pally = await fetch(h.origin + "/fonts/Pally-Variable.woff2");
+  expect(pally.status).toBe(pallyBundled ? 200 : 404);
+  if (pallyBundled) expect(pally.headers.get("content-type")).toContain("font/woff2");
+  const fontRes = await fetch(h.origin + "/fonts/Caveat-Regular.ttf");
+  expect(fontRes.status).toBe(200);
+  const cacheControl = fontRes.headers.get("cache-control") ?? "";
+  expect(cacheControl).toContain("max-age=31536000");
+  expect(cacheControl).toContain("immutable");
+  expect(fontRes.headers.get("content-security-policy")).toContain(
+    "default-src 'self'",
+  );
+
+  const missingFont = await fetch(h.origin + "/fonts/missing.woff2");
+  expect(missingFont.status).toBe(404);
 });

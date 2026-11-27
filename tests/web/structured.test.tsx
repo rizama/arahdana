@@ -163,9 +163,14 @@ describe('Simulasi KPR', () => {
     const summary = renderToStaticMarkup(<KprResults result={result} tab={0} />);
     expect(summary).toContain('Jadwal cicilan bulanan');
     const download = renderToStaticMarkup(<KprResults result={result} tab={2} />);
-    expect(download).toContain('1024×1024');
-    expect(download).toContain('1080×1920');
-    for (const html of [summary, costs, download]) {
+    expect(download).toContain('Nama kamu (opsional)');
+    expect(download).toContain('Lanjut tanpa nama');
+    const downloadUnlocked = renderToStaticMarkup(
+      <KprResults result={result} tab={2} initialExportTheme="light" />,
+    );
+    expect(downloadUnlocked).toContain('1024×1024');
+    expect(downloadUnlocked).toContain('1080×1920');
+    for (const html of [summary, costs, download, downloadUnlocked]) {
       expect(html).not.toContain('NaN');
       expect(html).not.toContain('style=');
     }

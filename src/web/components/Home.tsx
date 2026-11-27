@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { CalculatorSlug } from "../../domain/calculators/types";
-import { calculators } from "../config";
+import { calculators, showCeritaUang } from "../config";
 import episodes from "../episodes.json";
 import css from "../binder/binder.module.css";
 
@@ -214,8 +214,6 @@ const slipMeta: Record<CalculatorSlug, SlipMeta> = {
 const plateTones = [css.plateInk, css.plateOchre, css.plateSage, css.plateTerracotta];
 
 export function Home() {
-  const carousel = useRef<HTMLDivElement>(null);
-
   return (
     <>
       <section className={css.heroSection} aria-labelledby="hero-heading">
@@ -232,9 +230,11 @@ export function Home() {
               <span>BUKA SLIP HITUNGAN</span>
               <span aria-hidden="true">↓</span>
             </a>
-            <a className={css.btnSecondary} href="#stories-heading">
-              BACA #CERITAUANG ↗
-            </a>
+            {showCeritaUang && (
+              <a className={css.btnSecondary} href="#stories-heading">
+                BACA #CERITAUANG ↗
+              </a>
+            )}
           </div>
         </div>
         <div className={css.heroRight}>
@@ -346,95 +346,103 @@ export function Home() {
         ))}
       </section>
 
-      <section id="arsip-cerita" aria-labelledby="stories-heading" className={css.archiveSection}>
-        <div className={css.archiveHeader}>
-          <div>
-            <span className={css.archiveBadge}>KENALI UANGMU · #CERITAUANG</span>
-            <h2 id="stories-heading">#CeritaUang</h2>
-            <p className={css.archiveDesc}>
-              Gaji pas-pasan, tanggungan keluarga, sampai utang setelah menikah. Sepuluh cerita
-              tentang keputusan di balik angka.
-            </p>
-          </div>
-          <div className={css.carouselActions}>
-            <button
-              type="button"
-              className={css.carouselBtn}
-              onClick={() =>
-                carousel.current?.scrollBy({
-                  left: -320,
-                  behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-                    ? "instant"
-                    : "smooth",
-                })
-              }
-              aria-label="Episode sebelumnya"
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              className={css.carouselBtn + " " + css.carouselBtnPrimary}
-              onClick={() =>
-                carousel.current?.scrollBy({
-                  left: 320,
-                  behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-                    ? "instant"
-                    : "smooth",
-                })
-              }
-              aria-label="Episode berikutnya"
-            >
-              →
-            </button>
-          </div>
-        </div>
-
-        <div
-          className={css.carousel}
-          ref={carousel}
-          tabIndex={0}
-          role="region"
-          aria-label="10 episode CeritaUang"
-        >
-          {episodes.map(([id, title], i) => (
-            <a
-              href={"https://www.youtube.com/watch?v=" + id}
-              key={id}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={css.episodeCard}
-            >
-              <div className={css.episodePlate}>
-                <div className={css.episodePlateHead + " " + plateTones[i % plateTones.length]}>
-                  <span>BERKAS #{String(i + 1).padStart(2, "0")}</span>
-                  <span>ARSIP</span>
-                </div>
-                <img
-                  src={"/posters/episode-" + (i + 1) + ".svg"}
-                  alt=""
-                  width="480"
-                  height="270"
-                />
-              </div>
-              <span className={css.episodeTitle}>{title}</span>
-              <div className={css.episodeFoot}>
-                <small>VIDEO #CERITAUANG</small>
-                <span className={css.episodeCta}>Buka di YouTube ↗</span>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        <a
-          href="https://www.youtube.com/playlist?list=PLaRLWENa_gNqs0WEdo2f4IKTuCgBmRQVg"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={css.playlistLink}
-        >
-          Lihat playlist #CeritaUang ↗
-        </a>
-      </section>
+      {showCeritaUang && <CeritaUangArchive />}
     </>
+  );
+}
+
+function CeritaUangArchive() {
+  const carousel = useRef<HTMLDivElement>(null);
+
+  return (
+    <section id="arsip-cerita" aria-labelledby="stories-heading" className={css.archiveSection}>
+      <div className={css.archiveHeader}>
+        <div>
+          <span className={css.archiveBadge}>KENALI UANGMU · #CERITAUANG</span>
+          <h2 id="stories-heading">#CeritaUang</h2>
+          <p className={css.archiveDesc}>
+            Gaji pas-pasan, tanggungan keluarga, sampai utang setelah menikah. Sepuluh cerita
+            tentang keputusan di balik angka.
+          </p>
+        </div>
+        <div className={css.carouselActions}>
+          <button
+            type="button"
+            className={css.carouselBtn}
+            onClick={() =>
+              carousel.current?.scrollBy({
+                left: -320,
+                behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+                  ? "instant"
+                  : "smooth",
+              })
+            }
+            aria-label="Episode sebelumnya"
+          >
+            ←
+          </button>
+          <button
+            type="button"
+            className={css.carouselBtn + " " + css.carouselBtnPrimary}
+            onClick={() =>
+              carousel.current?.scrollBy({
+                left: 320,
+                behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+                  ? "instant"
+                  : "smooth",
+              })
+            }
+            aria-label="Episode berikutnya"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <div
+        className={css.carousel}
+        ref={carousel}
+        tabIndex={0}
+        role="region"
+        aria-label="10 episode CeritaUang"
+      >
+        {episodes.map(([id, title], i) => (
+          <a
+            href={"https://www.youtube.com/watch?v=" + id}
+            key={id}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={css.episodeCard}
+          >
+            <div className={css.episodePlate}>
+              <div className={css.episodePlateHead + " " + plateTones[i % plateTones.length]}>
+                <span>BERKAS #{String(i + 1).padStart(2, "0")}</span>
+                <span>ARSIP</span>
+              </div>
+              <img
+                src={"/posters/episode-" + (i + 1) + ".svg"}
+                alt=""
+                width="480"
+                height="270"
+              />
+            </div>
+            <span className={css.episodeTitle}>{title}</span>
+            <div className={css.episodeFoot}>
+              <small>VIDEO #CERITAUANG</small>
+              <span className={css.episodeCta}>Buka di YouTube ↗</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <a
+        href="https://www.youtube.com/playlist?list=PLaRLWENa_gNqs0WEdo2f4IKTuCgBmRQVg"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={css.playlistLink}
+      >
+        Lihat playlist #CeritaUang ↗
+      </a>
+    </section>
   );
 }

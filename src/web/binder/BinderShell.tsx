@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { CalculatorSlug } from "../../domain/calculators/types";
+import { calculators, showCeritaUang } from "../config";
 import css from "./binder.module.css";
 
 function ThemeIcon({ dark }: { dark: boolean }) {
@@ -29,7 +31,7 @@ export function BinderShell({
   onToggleTheme,
   children,
 }: {
-  route: "home" | "dana-darurat";
+  route: "home" | CalculatorSlug;
   dark: boolean;
   onToggleTheme: () => void;
   children: ReactNode;
@@ -98,10 +100,12 @@ export function BinderShell({
                       <span className={css.tabDot} aria-hidden="true" />
                       <span>Tab 03: Keluarga</span>
                     </a>
-                    <a href="#stories-heading" className={css.folderTab + " " + css.tabTerracotta}>
-                      <span className={css.tabDot} aria-hidden="true" />
-                      <span>#CeritaUang</span>
-                    </a>
+                    {showCeritaUang && (
+                      <a href="#stories-heading" className={css.folderTab + " " + css.tabTerracotta}>
+                        <span className={css.tabDot} aria-hidden="true" />
+                        <span>#CeritaUang</span>
+                      </a>
+                    )}
                   </>
                 ) : (
                   <>
@@ -112,16 +116,18 @@ export function BinderShell({
                       <span>Kalkulator</span>
                     </a>
                     <a
-                      href="/dana-darurat"
+                      href={"/" + route}
                       aria-current="page"
                       className={css.folderTab + " " + css.tabSage}
                     >
                       <span className={css.tabDot} aria-hidden="true" />
-                      <span>Dana Darurat</span>
+                      <span>{calculators[route].title}</span>
                     </a>
-                    <a href="/#stories-heading" className={css.folderTab + " " + css.tabTerracotta}>
-                      <span>#CeritaUang</span>
-                    </a>
+                    {showCeritaUang && (
+                      <a href="/#stories-heading" className={css.folderTab + " " + css.tabTerracotta}>
+                        <span>#CeritaUang</span>
+                      </a>
+                    )}
                   </>
                 )}
               </nav>
@@ -161,9 +167,11 @@ export function BinderShell({
                   <li>
                     <a href="#folio-03">Tab 03: Keluarga &amp; pendidikan</a>
                   </li>
-                  <li>
-                    <a href="#stories-heading">Arsip: #CeritaUang</a>
-                  </li>
+                  {showCeritaUang && (
+                    <li>
+                      <a href="#stories-heading">Arsip: #CeritaUang</a>
+                    </li>
+                  )}
                 </ul>
               </div>
               <div>

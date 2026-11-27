@@ -4,6 +4,7 @@ import { BinderShell } from "./binder/BinderShell";
 import { Emergency } from "./emergency/Emergency";
 import { ConversationalForm } from "./conversational/Form";
 import { Feedback } from "./components/Feedback";
+import { showCeritaUang } from "./config";
 import { slugSchema } from "../domain/calculators/schemas";
 import styles from "./app.module.css";
 
@@ -20,7 +21,7 @@ function currentPath() {
 }
 
 function isBinderPath(path: string) {
-  return !path || path === "dana-darurat";
+  return !path || slugSchema.safeParse(path).success;
 }
 
 const initial = storedTheme();
@@ -55,11 +56,17 @@ export default function App() {
     return (
       <>
         <BinderShell
-          route={path === "dana-darurat" ? "dana-darurat" : "home"}
+          route={parsed.success ? parsed.data : "home"}
           dark={dark}
           onToggleTheme={toggle}
         >
-          {!path ? <Home /> : <Emergency />}
+          {!parsed.success ? (
+            <Home />
+          ) : parsed.data === "dana-darurat" ? (
+            <Emergency />
+          ) : (
+            <ConversationalForm key={parsed.data} slug={parsed.data} />
+          )}
         </BinderShell>
         <Feedback />
       </>
@@ -77,7 +84,7 @@ export default function App() {
         </a>
         <nav aria-label="Navigasi utama">
           <a href="/#pilih-tujuan">Kalkulator</a>
-          <a href="/#stories-heading">CeritaUang</a>
+          {showCeritaUang && <a href="/#stories-heading">CeritaUang</a>}
           <button onClick={toggle} aria-pressed={dark} aria-label="Tema gelap">
             <Icon
               path={

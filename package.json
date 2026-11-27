@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "node --env-file=.env --import tsx src/server/dev.ts",
     "typecheck": "tsc --noEmit",
-    "build": "vite build && tsc -p tsconfig.server.json",
+    "build": "node scripts/check-fonts.mjs && vite build && tsc -p tsconfig.server.json",
     "start": "node --env-file=.env build/server/index.js",
     "test": "node --env-file=.env node_modules/vitest/vitest.mjs run",
     "db:generate": "drizzle-kit generate",

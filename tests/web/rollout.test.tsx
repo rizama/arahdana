@@ -20,9 +20,24 @@ function build(slug: CalculatorSlug, answers = samples[slug]) {
   const result = calculate(slug, payload);
   return { spec, answers, payload, result, rec: result.recommendations as Result };
 }
-function render(slug: CalculatorSlug, tab: number, answers?: Answers, initialSegment?: Segment) {
+function render(
+  slug: CalculatorSlug,
+  tab: number,
+  answers?: Answers,
+  initialSegment?: Segment,
+  initialExportTheme?: 'light' | 'dark' | null,
+) {
   const { spec, payload, result } = build(slug, answers);
-  return renderToStaticMarkup(<ConversationalResults spec={spec} result={result} payload={payload} tab={tab} initialSegment={initialSegment} />);
+  return renderToStaticMarkup(
+    <ConversationalResults
+      spec={spec}
+      result={result}
+      payload={payload}
+      tab={tab}
+      initialSegment={initialSegment}
+      initialExportTheme={initialExportTheme}
+    />,
+  );
 }
 
 describe('Tahap 1 rollout — konfigurasi 5 kalkulator linear', () => {
@@ -30,8 +45,11 @@ describe('Tahap 1 rollout — konfigurasi 5 kalkulator linear', () => {
     const spec = getSpec(slug);
     expect(spec.options).toEqual(['payment', 'duration', 'return']);
     expect(spec.showAllocation).toBe(false);
-    const strategy = render(slug, 0), recommendation = render(slug, 1), download = render(slug, 2);
-    for (const html of [strategy, recommendation, download]) {
+    const strategy = render(slug, 0),
+      recommendation = render(slug, 1),
+      download = render(slug, 2),
+      downloadUnlocked = render(slug, 2, undefined, undefined, 'light');
+    for (const html of [strategy, recommendation, download, downloadUnlocked]) {
       expect(html).not.toContain('style=');
       expect(html).not.toContain('! Belum Cocok');
       expect(html).not.toContain('NaN');
@@ -41,8 +59,10 @@ describe('Tahap 1 rollout — konfigurasi 5 kalkulator linear', () => {
     expect(recommendation).toContain('Nominal');
     expect(recommendation).toContain('Durasi');
     expect(recommendation).toContain('Return');
-    expect(download).toContain('1024×1024');
-    expect(download).toContain('1080×1920');
+    expect(download).toContain('Nama kamu (opsional)');
+    expect(download).toContain('Lanjut tanpa nama');
+    expect(downloadUnlocked).toContain('1024×1024');
+    expect(downloadUnlocked).toContain('1080×1920');
   });
   it('/dana-darurat tetap dua segmen dan mempertahankan alokasi 50/50', () => {
     const spec = getSpec('dana-darurat');

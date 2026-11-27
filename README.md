@@ -10,6 +10,8 @@ Menyediakan 9 kalkulator finansial (**Investasi**, **Dana Darurat**, **DP Proper
 - Node.js `24.1.0` & npm `11.3.0`
 - PostgreSQL 16 (database dev dan test terpisah)
 
+Opsional, sediakan `public/fonts/Pally-Variable.woff2` dari Fontshare untuk memakai Pally. Berkas ini dikecualikan sesuai `public/fonts/Pally-FFL.txt`. Tanpa berkas tersebut, aplikasi memakai font cadangan Binder dan build tetap berjalan.
+
 ### 1. Konfigurasi & Migrasi
 Salin `.env.example` menjadi `.env`, lalu isi `DATABASE_URL`, `TEST_DATABASE_URL`, dan `PORT` (default `3000`):
 

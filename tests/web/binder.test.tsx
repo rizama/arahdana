@@ -17,7 +17,7 @@ import {
 } from "../../src/web/emergency/summary";
 
 describe("T-BINDER-01 — Binder shell & Home", () => {
-  it("renders three folio groups, 9 calculator links, 2 coming-soon items, and 10 #CeritaUang episodes", () => {
+  it("renders three folio groups, 9 calculator links, and 2 coming-soon items", () => {
     const html = renderToStaticMarkup(<Home />);
     expect(html).toContain('id="pilih-tujuan"');
     expect(html).toContain('id="folio-01"');
@@ -29,7 +29,6 @@ describe("T-BINDER-01 — Binder shell & Home", () => {
       expect(html).toContain(`href="/${slug}"`);
     }
     expect(html.match(/aria-disabled="true"/g) ?? []).toHaveLength(2);
-    expect(html).toContain("Lihat playlist #CeritaUang");
     expect(html).not.toContain("style=");
     expect(html).not.toContain("animate-pulse");
     expect(html).not.toContain("JAMINAN ARIP");
@@ -43,7 +42,7 @@ describe("T-BINDER-01 — Binder shell & Home", () => {
     );
     expect(homeShell).toContain('aria-label="Tema gelap"');
     expect(homeShell).toContain('href="#folio-01"');
-    expect(homeShell).toContain('href="#stories-heading"');
+    expect(homeShell).not.toContain("stories-heading");
     expect(homeShell).toContain("Jaminan Arsip");
     expect(homeShell).toContain("Arda (Arah Dana)");
     expect(homeShell).not.toContain("style=");
@@ -57,6 +56,7 @@ describe("T-BINDER-01 — Binder shell & Home", () => {
     expect(ddShell).toContain('aria-current="page"');
     expect(ddShell).toContain('aria-pressed="true"');
     expect(ddShell).toContain('href="/#pilih-tujuan"');
+    expect(ddShell).not.toContain("stories-heading");
     expect(ddShell).not.toContain("Indeks Halaman");
     expect(ddShell).not.toContain("Jaminan Arsip");
     expect(ddShell).toContain("Arda (Arah Dana)");

@@ -47,6 +47,13 @@ export function createApp(databaseUrl: string) {
   app.use("/api", (_req, res) => {
     res.status(404).json({ error: "Not found" });
   });
+  app.use(
+    "/fonts",
+    express.static(path.resolve("dist/fonts"), {
+      maxAge: "1y",
+      immutable: true,
+    }),
+  );
   app.use(express.static(path.resolve("dist")));
   app.get(
     [
